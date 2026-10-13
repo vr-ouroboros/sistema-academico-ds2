@@ -1,53 +1,48 @@
 /*
-* CONTROLLER DE ALUNOS
-*
-* O Controller coordena o funcionamento da aplicação.
+* CONTROLLER DE ALUNOS - VERSÃO COM DOM
 * 
-* Ele é resonsável por:
-* - solicitar dados à View;
-* - enviar os dados ao Model;
-* - receber o resultado do Model;
-* - decidir qual método da View será executado;
-* - controlar a repetição dos cadastros;
+* O Controller:
+* - inicia a aplicação;
+* - conecta o formulário à operação de cadastro;
+* - envia os dados ao Model;
+* - analisa o resultado;
+* - solicita a atualização da View;
 * - coordenar a conversão dos dados para JSON.
-* 
-* O Controller não deve:
-* - validar campos;
-* - verificar RA duplicado;
-* - armazena alunos;
-* - apresentar diretamente mensagens no controle.
 */
 
 const AlunoController = {
     
     iniciar() {
-        let continuar = true;
 
-        while (continuar) {
-            const dados = AlunoView.lerDados();
+        alunoView.inicializar();
 
-            const resultado = AlunoModel.cadastrar(dados);
+        alunoView.configurarFormulario(function (dados) {
+            AlunoController.cadastrar(dados);
+        });
 
-            if (resultado.sucesso) {
+        AlunoController.atualizarVisualizacao()
+    },
 
-                AlunoView.exibirAluno(resultado.aluno)
-            } else {
+    cadastrar(dados) {
+        const resultado = AlunoModel.cadastrar(dados);
 
-                AlunoView.exibirErro(resultado.mensagem);
-            }
-
-            continuar = AlunoView.perguntarNovoCadastro();
+        if(!resultado.sucesso) {
+            AlunoView.exibirErro(resultado.mensagem);
+            return;
         }
 
-        const alunos = AlunoModel.listar();
+        AlunoView.exibirSucesso(`Aluno ${resultado.aluno.nome} cadastrado com sucesso.`);
 
-        AlunoView.exibirLista(alunos);
+        AlunoView.limparFormulario();
+        AlunoController.atualizarVisualizacao();
+    },
+
+    atualizarVisualizacao() {
+        const alunos = AlunoModel.listar();
+        alunoView.exibirLista(alunos);
+        const textoJson = JSON.stringify(alunos, null, 2);
 
         AlunoView.exibirJson(textoJson);
-
-        const dadosRecuperados = JSON.parse(textoJson);
-
-        AlunoView.exibirDadosRecuperados(dadosRecuperados);
     }
 };
 
