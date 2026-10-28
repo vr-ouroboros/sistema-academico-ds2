@@ -1,16 +1,11 @@
 /*
-* VIEW DE ALUNOS - VERSÃO COM DOM
+* VIEW DE ALUNOS - VERSÃO 0.3
 *
-* A View é responsável por:
-* - localizar elementos HTML;
-* - ler os campos do formulário;
-* - observar o evento submit;
-* - apresentar mensagens;
-* - montar a tabela;
-* - apresentar o JSON
+* A View continua responsável pelo DOM e pelos eventos.
+* 
 */
 
-const AunoView = {
+const AlunoView = {
     elementos: {},
 
     inicializar() {
@@ -24,6 +19,7 @@ const AunoView = {
         AlunoView.elementos.corpoTabela = document.getElementById("corpo-tabela-alunos");
         AlunoView.elementos.totalAlunos = document.getElementById("total-alunos");
         AlunoView.elementos.saidaJson = document.getElementById("saida-json");
+        AlunoView.elementos.botaoLimpar = document.getElementById("btn-limpar-dados");
     },
     configurarFormulario(aoEnviar) {
         AlunoView.elementos.formulario.addEventListener("submit", function (evento) {
@@ -31,6 +27,11 @@ const AunoView = {
             const dados = AlunoView.lerDados();
             aoEnviar(dados);
         })
+    },
+    configurarBotaoLimpar(aoLimpar) {
+        AlunoView.elementos.botaoLimpar.addEventListener("click", function() {
+            aoLimpar();
+        });
     },
 
     lerDados() {
@@ -41,6 +42,10 @@ const AunoView = {
             curso: AlunoView.elementos.curso.value,
             turma: AlunoView.elementos.turma.value
         };
+    },
+
+    confirmarLimpeza() {
+        return confirm("Deseja remover todos os alunos cadastrados?");
     },
 
     exibirSucesso(mensagem) {

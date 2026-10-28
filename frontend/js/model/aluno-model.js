@@ -1,16 +1,16 @@
 /*
-* MODEL DE ALUNOS
+* MODEL DE ALUNOS - VERSÃO 0.3
 *
-* O Model é responsável:
-*  - pelos dados dos alunos;
-*  - pelas validações;
-*  - pelas regras do cadastro.
+* O Model contém as regras relacionadas ao aluno;
 * 
-*  Ele não deve utulizar prompt(), alert(), console.log()
-* ou manipula elementos HTML.
+* Ele não sabe:
+*  - de onde os dados vieram;
+*  - como serão apresentados;
+*  - onde serão armazenados.
+* 
 */
 
-const AlunoModel ={
+const AlunoModel = {
     alunos: [],
 
     normalizarTexto(valor) {
@@ -29,8 +29,18 @@ const AlunoModel ={
             aluno => aluno.ra === ra
         );
     },
+    gerarProximoId(alunos) {
+        if (alunos.lenght === 0) {
+            return 1;
+        }
 
-    cadastrar(dados) {
+        const ids = alunos.map(aluno => aluno.id);
+        const maiorId = Math.max(...ids);
+        return maiorId + 1;
+    },
+    
+
+    criar(dados, alunos) {
         const ra = AlunoModel.normalizarTexto(dados.ra);
         const nome = AlunoModel.normalizarTexto(dados.nome);
         const email = AlunoModel.normalizarTexto(dados.curso);
@@ -63,15 +73,13 @@ const AlunoModel ={
         }
 
         const aluno = {
-            id: AlunoModel.alunos.length + 1,
+            id: AlunoModel.gerarProximoId(alunos),
             ra: ra,
             nome: nome,
             email: email,
             turma: turma,
-
             ativo: true
         };
-        AlunoModel.alunos.push(aluno);
 
         return {
             sucesso: true,

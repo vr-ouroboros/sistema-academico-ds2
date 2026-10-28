@@ -1,13 +1,12 @@
 /*
-* CONTROLLER DE ALUNOS - VERSÃO COM DOM
+* CONTROLLER DE ALUNOS - VERSÃO 0.3
 * 
-* O Controller:
-* - inicia a aplicação;
-* - conecta o formulário à operação de cadastro;
-* - envia os dados ao Model;
-* - analisa o resultado;
-* - solicita a atualização da View;
-* - coordenar a conversão dos dados para JSON.
+* O Controller agora utiliza o Service.
+* 
+* Ele não acessa diretamente:
+* - o array;
+* - o localStorage;
+* - o Model;
 */
 
 const AlunoController = {
@@ -18,6 +17,10 @@ const AlunoController = {
 
         alunoView.configurarFormulario(function (dados) {
             AlunoController.cadastrar(dados);
+        });
+
+        AlunoView.configurarBotaoLimpar(function() {
+            AlunoController.limparDados();
         });
 
         AlunoController.atualizarVisualizacao()
@@ -34,6 +37,27 @@ const AlunoController = {
         AlunoView.exibirSucesso(`Aluno ${resultado.aluno.nome} cadastrado com sucesso.`);
 
         AlunoView.limparFormulario();
+        AlunoController.atualizarVisualizacao();
+    },
+
+    limparDados() {
+        const alunos = AlunoService.listar();
+
+        if(alunos.lenght === 0) {
+            AlunoView.exibirErro("Não existem alunos para remover.");
+
+            return;
+        }
+
+        const confirmou = AlunoView.confirmarLimpeza();
+
+        if(!confirmou) {
+            return;
+        }
+
+        AlunoService.limpar();
+
+        AlunoView.exibirSucesso("Todos os alunos foram removidos.");
         AlunoController.atualizarVisualizacao();
     },
 

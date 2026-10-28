@@ -6,6 +6,7 @@
     <title>Sistema Acadêmico DS II</title>
     <link rel="sylesheet" href="./css/estilo.css">
     <script src="./js/model/aluno-model.js" defer></script>
+    <script src=".js/service/aluno-service.js" defer></script>
     <script src="./js/view/aluno-view.js" defer></script>
     <script src="./js/controller/aluno-controller.js" defer></script>
 </head>
@@ -14,7 +15,7 @@
         <div class="container">
             <h1>Sistema Acadêmico DS II</h1>
             <p>
-                Versão 0.2 - cadastro de alunos com DOM e eventos
+                Versão 0.3 - cadastro de alunos com DOM e eventos
             </p>
         </div>
     </header>
@@ -77,7 +78,14 @@
                         >
                     </div>
                 </div>
-                <button type="submit">Cadastrar aluno</button>
+                <div class="acoes-formulario">
+                    <button type="submit">Cadastrar aluno</button>
+                    <button type="button"
+                    id="btn-limpar-dados"
+                    class="botao-secundario">
+                    Limpar dados
+                    </button>
+                </div>
             </form>
             <div
                 id="mensagem"
