@@ -1,37 +1,27 @@
 /*
-* VIEW DE ALUNOS - VERSÃO 0.3
+* A View é responsável pela interface.
 *
-* A View continua responsável pelo DOM e pelos eventos.
-* 
+* Ela lê o formulário, apresenta mensagens,
+* atualiza a tabela e exibe o JSON.
 */
 
 const AlunoView = {
     elementos: {},
 
-    inicializar() {
-        AlunoView.elementos.formulario = document.getElementById("form-aluno");
-        AlunoView.elementos.ra = document.getElementById("ra");
-        AlunoView.elementos.nome = document.getElementById("nome");
-        AlunoView.elementos.email = document.getElementById("email");
-        AlunoView.elementos.curso = document.getElementById("curso");
-        AlunoView.elementos.turma = document.getElementById("turma");
-        AlunoView.elementos.mensagem = document.getElementById("mensagem");
-        AlunoView.elementos.corpoTabela = document.getElementById("corpo-tabela-alunos");
-        AlunoView.elementos.totalAlunos = document.getElementById("total-alunos");
-        AlunoView.elementos.saidaJson = document.getElementById("saida-json");
-        AlunoView.elementos.botaoLimpar = document.getElementById("btn-limpar-dados");
+    iniciar() {
+        AlunoView.elementos.formulario = document.querySelector("#form-aluno");
+        AlunoView.elementos.ra = document.querySelector("#ra");
+        AlunoView.elementos.nome = document.querySelector("#nome");
+        AlunoView.elementos.email = document.querySelector("#email");
+        AlunoView.elementos.curso = document.querySelector("#curso");
+        AlunoView.elementos.turma = document.querySelector("#turma");
+        AlunoView.elementos.mensagem = document.querySelector("#mensagem");
+        AlunoView.elementos.corpoTabela = document.querySelector("#corpo-tabela-alunos");
+        AlunoView.elementos.saidaJson = document.querySelector("#saida-json");
+        AlunoView.elementos.botaoLimpar = document.querySelector("#botao-salvar");
     },
     configurarFormulario(aoEnviar) {
-        AlunoView.elementos.formulario.addEventListener("submit", function (evento) {
-            evento.preventDefault();
-            const dados = AlunoView.lerDados();
-            aoEnviar(dados);
-        })
-    },
-    configurarBotaoLimpar(aoLimpar) {
-        AlunoView.elementos.botaoLimpar.addEventListener("click", function() {
-            aoLimpar();
-        });
+        AlunoView.elementos.formulario.addEventListener("submit", aoEnviar);
     },
 
     lerDados() {
@@ -44,29 +34,21 @@ const AlunoView = {
         };
     },
 
-    confirmarLimpeza() {
-        return confirm("Deseja remover todos os alunos cadastrados?");
-    },
-
-    exibirSucesso(mensagem) {
+    exibirMensagem(mensagem, tipo) {
         AlunoView.elementos.mensagem.textContent = mensagem;
-        AlunoView.elementos.mensagem.className = "mensagem-sucesso";
+
+        AlunoView.elementos.mensagem.className = `mensagem ${tipo}`;
     },
 
-    exibirErro(mensagem) {
-        AlunoView.elementos.mensagem.textContent = mensagem;
-        AlunoView.elementos.mensagem.className = "mensagem-erro";
-    },
+    criarCelula(valor) {
+        const celula = document.createElement("td");
+        celula.textContent = valor;
 
-    limparFormulario() {
-        AlunoView.elementos.formulario.reset();
-        AlunoView.elementos.ra.focus();
+        return celula;
     },
 
     exibirLista(alunos) {
-        const corpoTabela = AlunoView.elementos.corpoTabela;
-        corpoTabela.textContent = "";
-        AlunoView.elementos.totalAlunos.textContent = `Total: ${alunos.lenght}`;
+        AlunoView.elementos.corpoTabela.innerHTML = "";
 
         if (alunos.lenght === 0) {
             const linha = document.createElement("tr");
@@ -76,35 +58,39 @@ const AlunoView = {
             celula.textContent = "Nenhum aluno foi cadastrado.";
 
             linha.appendChild(celula);
-            corpoTabela.appendChild(linha);
+            AlunoView.elementos.corpoTabela.appendChild(linha);
 
             return;
         }
 
-        alunos.forEach(function (aluno) {
+        alunos.forEach(aluno => {
             const linha = document.createElement("tr");
 
-            const valores = [
-                aluno.id,
-                aluno.ra,
-                aluno.nome,
-                aluno.email,
-                aluno.curso,
-                aluno.turma,
-                aluno.ativo ? "Ativo" : "Inativo"
-            ];
+            linha.appendChild(AlunoView.criarCelula(aluno.id));
+            linha.appendChild(AlunoView.criarCelula(aluno.ra));
+            linha.appendChild(AlunoView.criarCelula(aluno.nome));
+            linha.appendChild(AlunoView.criarCelula(aluno.email));
+            linha.appendChild(AlunoView.criarCelula(aluno.curso));
+            linha.appendChild(AlunoView.criarCelula(aluno.turma));
 
-            valores.forEach(function (valor) {
-                const celula = document.createElement("td");
+            linha.appendChild(AlunoView.criarCelula(aluno.ativo ? "Sim" : "Não"));
 
-                celula.textContent = valor;
-                linha.appendChild(celula);
-            });
-            corpoTabela.appendChild(linha);
+            AlunoView.elementos.corpoTabela.appendChild(linha);
         });
     },
 
-    exibirJson(textoJson) {
-        AlunoView.elementos.saidaJson.textContent = textoJson;
+    exibirJson(alunos) {
+        AlunoView.elementos.saidaJson.textContent = JSON.stringify(alunos, null, 2);
     },
+
+    limparFormulário() {
+        AlunoView.elementos.formulario.reset();
+        AlunoView.elementos.ra.focus();
+    },
+
+    alterarEstadoFormulario(processando) {
+        AlunoView.elementos.botaoSalvar.disabled = processando;
+
+        AlunoView.elementos.botaoSalvar.textContent = processando ? "Salvando..." : "Cadastrar aluno";
+    }
 };
