@@ -18,7 +18,7 @@ const AlunoView = {
         AlunoView.elementos.mensagem = document.querySelector("#mensagem");
         AlunoView.elementos.corpoTabela = document.querySelector("#corpo-tabela-alunos");
         AlunoView.elementos.saidaJson = document.querySelector("#saida-json");
-        AlunoView.elementos.botaoLimpar = document.querySelector("#botao-salvar");
+        AlunoView.elementos.botaoSalvar = document.querySelector("#botao-salvar");
     },
     configurarFormulario(aoEnviar) {
         AlunoView.elementos.formulario.addEventListener("submit", aoEnviar);
@@ -50,7 +50,7 @@ const AlunoView = {
     exibirLista(alunos) {
         AlunoView.elementos.corpoTabela.innerHTML = "";
 
-        if (alunos.lenght === 0) {
+        if (alunos.length === 0) {
             const linha = document.createElement("tr");
             const celula = document.createElement("td");
 
@@ -83,7 +83,7 @@ const AlunoView = {
         AlunoView.elementos.saidaJson.textContent = JSON.stringify(alunos, null, 2);
     },
 
-    limparFormulário() {
+    limparFormulario() {
         AlunoView.elementos.formulario.reset();
         AlunoView.elementos.ra.focus();
     },

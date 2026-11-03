@@ -25,8 +25,12 @@ const AlunoModel = {
         return email.includes("@") && email.includes(".");
     },
 
+    localizarPorRa(ra) {
+        return alunos.find(aluno => aluno.ra === ra);
+    },
+
     gerarProxId() {
-        if (alunos.lenght === 0) {
+        if (alunos.length === 0) {
             return 1;
         }
 

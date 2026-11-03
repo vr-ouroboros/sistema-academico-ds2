@@ -1,30 +1,9 @@
-import AlunoController from "../controller/aluno-controller";
+import AlunoController from "../controller/aluno-controller.js";
+import express from "express";
 
-import {
-    enviarJson,
-    enviarSemConteudo
-} from "../utils/http.js";
+const router = express.Router();
 
-export async function tratarRotas(req, res) {
-    const url = new URL(req.url, `http://${req.headers.host || "localhost"}`);
+router.get("/", AlunoController.listar);
+router.post("/", AlunoController.cadastrar);
 
-    const caminho = url.pathname;
-    const metodo = req.method;
-
-    if (metodo === "OPTIONS") {
-        enviarSemConteudo(res);
-        return true;
-    }
-
-    if (metodo === "GET" && caminho === "/api/alunos") {
-        AlunoController.listar(req, res);
-        return true;
-    }
-
-    if (metodo === "POST" && caminho === "/api/alunos") {
-        await AlunoController.cadastrar(req, res);
-        return true;
-    }
-
-    return false;
-}
+export default router;

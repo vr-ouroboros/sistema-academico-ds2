@@ -24,6 +24,12 @@ export function enviarJson(res, status, dados) {
     res.end(textoJson);
 }
 
+export function enviarSemConteudo(res) {
+    res.writeHead(204, cabecalhoCors);
+
+    res.end();
+}
+
 export function lerCorpoJson(req) {
     return new Promise((resolve, reject) => {
         let corpo = "";

@@ -32,11 +32,11 @@ const AlunoModel = {
         };
 
         if (
-            ra === "" ||
-            nome === "" ||
-            email === "" ||
-            curso === "" ||
-            turma === ""
+            aluno.ra === "" ||
+            aluno.nome === "" ||
+            aluno.email === "" ||
+            aluno.curso === "" ||
+            aluno.turma === ""
         ) {
             return {
                 sucesso: false,

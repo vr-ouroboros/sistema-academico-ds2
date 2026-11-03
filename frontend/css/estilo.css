@@ -73,7 +73,7 @@ main.container {
 }
 
 .campo input:focus{
-    background-color: #0f3d66;
+    border-color: #0f3d66;
     outline: 3px solid rgba(15, 61, 102, 0.15);
 }
 
